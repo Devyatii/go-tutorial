@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand/v2"
 	"net/http"
+	"strconv"
 )
 
 func main() {
@@ -19,6 +20,6 @@ func main() {
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
 	randValue := rand.IntN(6) + 1
-	w.Write([]byte(string(rune(randValue))))
+	w.Write([]byte(strconv.Itoa(randValue)))
 	return
 }
