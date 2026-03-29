@@ -18,7 +18,7 @@ func main() {
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	randValue := rand.IntN(7)
-	w.Write([]byte(string(randValue)))
+	randValue := rand.IntN(6) + 1
+	w.Write([]byte(string(rune(randValue))))
 	return
 }
