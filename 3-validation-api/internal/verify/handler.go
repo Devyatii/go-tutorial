@@ -29,7 +29,7 @@ func NewAuthHandler(router *http.ServeMux, deps VerifyHandlerDeps) {
 func (handler *VerifyHandler) Send() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		var payload VerifyRequest
-		err := json.NewDecoder(request.Body).Decode(payload)
+		err := json.NewDecoder(request.Body).Decode(&payload)
 		if err != nil {
 			response.Json(writer, err.Error(), 402)
 			return
@@ -49,8 +49,12 @@ func (handler *VerifyHandler) Send() http.HandlerFunc {
 		e.Subject = "Awesome Subject"
 		e.Text = []byte("Text Body is, of course, supported!")
 		e.HTML = []byte("<h1>Fancy HTML is supported, too!</h1>")
-		e.Send(fmt.Sprintf("%s:587", address), smtp.PlainAuth("", emailAddr, password, address))
-
+		mailSendError := e.Send(fmt.Sprintf("%s:587", address), smtp.PlainAuth("", emailAddr, password, address))
+		if mailSendError != nil {
+			response.Json(writer, mailSendError.Error(), 403)
+			return
+		}
+		writer.WriteHeader(http.StatusOK)
 	}
 }
 
