@@ -70,7 +70,7 @@ func (handler *VerifyHandler) Verify() http.HandlerFunc {
 			return
 		}
 		if !isFound {
-			response.Json(writer, err.Error(), 403)
+			response.Json(writer, "Email not verified", 403)
 			return
 		}
 		writer.WriteHeader(http.StatusOK)

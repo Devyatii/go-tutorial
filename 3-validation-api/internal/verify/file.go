@@ -37,7 +37,7 @@ func ReadEmailData(hash string) (bool, error) {
 	isFound := false
 
 	if err != nil {
-		return isFound, err
+		return false, err
 	}
 
 	var updatedEmailDataList []EmailData
@@ -50,12 +50,15 @@ func ReadEmailData(hash string) (bool, error) {
 		updatedEmailDataList = append(updatedEmailDataList, emailDataItem)
 	}
 
-	return isFound, writeEmailData(emailDataList)
+	return isFound, writeEmailData(updatedEmailDataList)
 }
 
 func getEmailData() ([]EmailData, error) {
 	content, err := os.ReadFile(EMAIL_DATA)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return []EmailData{}, nil
+		}
 		return nil, err
 	}
 
